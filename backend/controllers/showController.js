@@ -32,7 +32,6 @@ export const addShow = async (req, res) => {
         axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
           headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
         }),
-
         axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits`, {
           headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` },
         }),
@@ -48,7 +47,7 @@ export const addShow = async (req, res) => {
         poster_path: movieApiData.poster_path,
         backdrop_path: movieApiData.backdrop_path,
         genres: movieApiData.genres,
-        casts: movieApiData.casts,
+        casts: movieCreditsData.cast,
         release_date: movieApiData.release_date,
         original_language: movieApiData.original_language,
         tagline: movieApiData.tagline || "",
@@ -79,6 +78,47 @@ export const addShow = async (req, res) => {
     }
 
     res.json({ success: true, message: "Show Add Successfully!!" });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// API to get all shows from the database
+export const getShows = async (req, res) => {
+  try {
+    const shows = await Show.find({ showDateTime: { $gte: new Date() } }).populate("movie").sort({ showDateTime: 1 });
+
+    //  filter unique show
+    const uniqueShows = new Set(shows.map((show) => show.movie));
+
+    res.json({ success: true, shows: Array.from(uniqueShows) });
+  } catch (error) {
+    console.log(error); 
+    res.json({ success: false, message: error.message });
+  }
+}; 
+
+// API to get a single show from the database
+export const getShow = async (req, res) => {
+  try {
+    const { movieId } = req.params;
+    // get all upcoming shows for the movie
+    const shows = await Show.find({
+      movie: movieId,
+      showDateTime: { $gte: new Date() }});
+
+    const movie = await Movie.findById(movieId);
+    const dateTime = {};
+
+    shows.forEach((show) => {
+      const date = show.showDateTime.toString().split("T")[0];
+      if (!dateTime[date]) {
+        dateTime[date] = [];
+      }
+      dateTime[date].push({ time: show.showDateTime, showId: show._id });
+    });
+    res.json({ success: true, movie, dateTime });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
