@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { MenuIcon, SearchIcon, TicketPlus, XIcon } from "lucide-react";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
+import { useAppContext } from "../context/AppContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,6 +11,8 @@ const Navbar = () => {
   const { openSignIn } = useClerk();
 
   const navigate = useNavigate();
+
+  const { favoriteMovies } = useAppContext();
 
   return (
     <div
@@ -31,7 +34,7 @@ const Navbar = () => {
         />
         <Link
           onClick={() => {
-            (scrollTo(0, 0), setIsOpen(false))
+            (scrollTo(0, 0), setIsOpen(false));
           }}
           to={"/"}
         >
@@ -39,7 +42,7 @@ const Navbar = () => {
         </Link>
         <Link
           onClick={() => {
-            (scrollTo(0, 0), setIsOpen(false))
+            (scrollTo(0, 0), setIsOpen(false));
           }}
           to={"/movies"}
         >
@@ -47,7 +50,7 @@ const Navbar = () => {
         </Link>
         <Link
           onClick={() => {
-            (scrollTo(0, 0), setIsOpen(false))
+            (scrollTo(0, 0), setIsOpen(false));
           }}
           to={"/theaters"}
         >
@@ -55,20 +58,22 @@ const Navbar = () => {
         </Link>
         <Link
           onClick={() => {
-            (scrollTo(0, 0), setIsOpen(false))
+            (scrollTo(0, 0), setIsOpen(false));
           }}
           to={"/releases"}
         >
           Releases
         </Link>
-        <Link
-          onClick={() => {
-            (scrollTo(0, 0), setIsOpen(false))
-          }}
-          to={"/favorite"}
-        >
-          Favorites
-        </Link>
+        {favoriteMovies.length > 0 && (
+          <Link
+            onClick={() => {
+              (scrollTo(0, 0), setIsOpen(false));
+            }}
+            to={"/favorite"}
+          >
+            Favorites
+          </Link>
+        )}
       </div>
 
       <div className="flex items-center gap-8">
@@ -86,8 +91,8 @@ const Navbar = () => {
             <UserButton.MenuItems>
               <UserButton.Action
                 label="My Bookings"
-                labelIcon={<TicketPlus width={15} />} 
-                onClick={() => navigate('/my-bookings')}
+                labelIcon={<TicketPlus width={15} />}
+                onClick={() => navigate("/my-bookings")}
               />
             </UserButton.MenuItems>
           </UserButton>
