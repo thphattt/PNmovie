@@ -108,12 +108,11 @@ const SeatLayout = () => {
         { showId: selectedTime.showId, selectedSeats },
         { headers: { Authorization: `Bearer ${await getToken()}` } },
       );
-      
-      if(data.success){
-        toast.success(data.message)
-        navigate("/my-bookings")
-      }else{
-        toast.error(data.message)
+
+      if (data.success) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
