@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import { useAppContext } from '../../context/AppContext'
 import Loading from '../../components/Loading'
-import AdminNavbar from '../../components/admin/AdminNavBar'
+import AdminNavbar from '../../components/admin/AdminNavbar'
 import AdminSidebar from '../../components/admin/AdminSidebar'
 
 const Layout = () => {
