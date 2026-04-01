@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import AdminNavbar from '../../components/admin/AdminNavBar'
-import AdminSidebar from '../../components/admin/AdminSideBar'
+
 import { Outlet } from 'react-router-dom'
 import { useAppContext } from '../../context/AppContext'
 import Loading from '../../components/Loading'
+import AdminNavbar from '../../components/admin/AdminNavBar'
+import AdminSidebar from '../../components/admin/AdminSidebar'
 
 const Layout = () => {
 
